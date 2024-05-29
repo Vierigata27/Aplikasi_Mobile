@@ -67,20 +67,28 @@ class Artikel extends Component {
                 </View>
 
                 {/* category */}
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.scrollView}>
                 <View style={styles.category}>
                     <TouchableOpacity onPress={() => this.setState({ currentCategory: 'Otomotif' })} style={styles.link}>
-                        <Text style={styles.link}>Otomotif</Text>
+                        <Text style={styles.linkkategori}>Otomotif</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.setState({ currentCategory: 'Olahraga' })} style={styles.link}>
-                        <Text style={styles.link}>Olahraga</Text>
+                        <Text style={styles.linkkategori}>Olahraga</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.setState({ currentCategory: 'Kesehatan' })} style={styles.link}>
-                        <Text style={styles.link}>Kesehatan</Text>
+                        <Text style={styles.linkkategori}>Kesehatan</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.setState({ currentCategory: 'Kesehatan' })} style={styles.link}>
+                        <Text style={styles.linkkategori}>Sains</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.setState({ currentCategory: 'Kesehatan' })} style={styles.link}>
+                        <Text style={styles.linkkategori}>Internasional</Text>
                     </TouchableOpacity>
                 </View>
+                </ScrollView>
 
                 {/* berita */}
-                <ScrollView style={styles.scrollView}>
+                <ScrollView style={styles.scrollViewBerita}>
                     <View style={styles.beritaContainer}>
                         {filtered.map(item => (
                             <TouchableOpacity key={item.id}>
@@ -102,6 +110,7 @@ class Artikel extends Component {
 }  
 
 const styles = StyleSheet.create({
+    // header
     header: {
         backgroundColor: '#e74c3c',
         paddingVertical: 20,
@@ -109,12 +118,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-around',
     },
+
+    //categori
+    scrollView: {
+        flexDirection: 'row',
+    },
     category: {
         backgroundColor: '#FF8C00',
         paddingVertical: 7,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
+    },
+    linkkategori: {
+        fontSize: 14,
+        marginRight: 20,
+        padding: 10,
+        color: 'white',
+        fontFamily: 'Arial',
+        fontWeight: 'bold',
     },
     logo: {
         fontSize: 24,
@@ -140,6 +162,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Arial',
         fontWeight: 'bold',
     },
+
+    //berita
     beritaContainer: {
         padding: 20,
     },
