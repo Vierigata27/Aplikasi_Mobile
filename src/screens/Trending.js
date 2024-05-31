@@ -15,110 +15,157 @@ class Trending extends Component {
     constructor(props){
         super(props);
         this.state = {
-            text: '',
-            trendinglist: [] 
+            TrendingData: [], // State untuk menyimpan data trending 
+            trending: '',
+            idEdit: null,
         };
+        this.url = "http://192.168.18.158/Bezz/api.php";
+        this.klikSimpan = this.klikSimpan.bind(this);
+        this.klikEdit = this.klikEdit.bind(this);
+        this.klikDelete = this.klikDelete.bind(this);
     }
 
     componentDidMount(){
-        this.loadtrending();
+        this.ambilTabelTrending();
     }
 
-    create = () => {
-        const { text, trendinglist } = this.state; // Ambil state dari text dan trendinglist
-        if (text.trim() === '') { // Periksa apakah text tidak kosong
-            Alert.alert('Error', 'trending tidak boleh kosong');
-            return;
-        }
-
-        const updatedtrendinglist = [...trendinglist, text]; // Tambahkan trending baru ke daftar trending
-        this.setState({ trendinglist: updatedtrendinglist, text: '' }); // Perbarui state trendinglist dan reset text
-        this.savetrending(updatedtrendinglist); // Simpan trending ke AsyncStorage
-    }
-
-    savetrending = async (data) => {
-        try{
-            await AsyncStorage.setItem('@database', JSON.stringify(data)); // Simpan data trending ke AsyncStorage
-        } catch(e){
-            console.log('Save Error', e);
+    async ambilTabelTrending() {
+        try {
+            const response = await fetch(`${this.url}?op=tabel_trending`);
+            const json = await response.json();
+            console.log('Data Trending yang didapat: ' + JSON.stringify(json.data.result));
+            this.setState({ TrendingData: json.data.result }); // Simpan data Trending di state
+        } catch (error) {
+            console.error('Error fetching categories:', error);
         }
     }
 
-    loadtrending = async () => {
-        try{
-            const value = await AsyncStorage.getItem('@database'); // Ambil data trending dari AsyncStorage
-            if(value !== null){
-                this.setState({ trendinglist: JSON.parse(value) }); // Setel state trendinglist dari data yang diambil
+    klikSimpan() {
+        if (this.state.trending === '') {
+            Alert.alert('Silakan masukkan trending');
+        } else {
+            let urlAksi;
+            if (this.state.idEdit) {
+                urlAksi = `${this.url}?op=update_trending&id=${this.state.idEdit}`;
+                this.setState({ idEdit: null });
+            } else {
+                urlAksi = `${this.url}?op=create_trending`;
             }
-        } catch(e){
-            console.log('Get Error', e);
+        
+            fetch(urlAksi, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `trending=${this.state.trending}`
+            })
+            .then(response => response.json())
+            .then(json => {
+                this.setState({ trending: '' });
+                this.ambilTabelTrending();
+            });
         }
     }
 
-    deletetrending = (index) => {
-        const { trendinglist } = this.state;
-        const updatedtrendinglist = trendinglist.filter((item, idx) => idx !== index); // Filter trending yang akan dihapus
-        this.setState({ trendinglist: updatedtrendinglist }); // Perbarui state trendinglist
-        this.savetrending(updatedtrendinglist); // Simpan trending yang telah diubah ke AsyncStorage
+    async klikEdit(id) {
+        try {
+            const response = await fetch(`${this.url}?op=detail_trending&id=${id}`);
+            const json = await response.json();
+            this.setState({ trending: json.data.result[0].trending, idEdit: id });
+        } catch (error) {
+            console.error('Error editing trending:', error);
+        }
+    }
+
+    klikDelete(id) {
+        Alert.alert(
+            "Konfirmasi Hapus",
+            "Apakah Anda yakin ingin menghapus trend ini?",
+            [
+                {
+                    text: "Batal",
+                    onPress: () => console.log("Hapus dibatalkan"),
+                    style: "cancel"
+                },
+                {
+                    text: "Hapus", 
+                    onPress: async () => {
+                        try {
+                            const response = await fetch(`${this.url}?op=delete_trending&id=${id}`);
+                            const json = await response.json();
+                            Alert.alert('Trend berhasil dihapus');
+                            this.ambilTabelTrending();
+                        } catch (error) {
+                            console.error('Error deleting trending:', error);
+                        }
+                    }
+                }
+            ],
+            { cancelable: false }
+        );
     }
 
     render() {
-        const { trendinglist, text } = this.state;
+        const { TrendingData } = this.state;
         return (
-            <ScrollView>
-                <View style={styles.container}>
-                    {/* Header */}
-                    <View style={styles.header}>
-                        <Text style={styles.logo}>Logo</Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Utama')} style={styles.navButton}>
-                            <Text style={styles.nav}>Utama</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('About')} style={styles.navButton}>
-                            <Text style={styles.nav}>About</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Trending')} style={styles.navButton}>
-                            <Text style={styles.nav}>Trending</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    {/* Input Baru */}
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Tambahkan Trending Baru"
-                            value={text}
-                            onChangeText={(text) => this.setState({ text })}
-                        />
-                        <Button title="Simpan" onPress={this.create} />
-                    </View>
-
-                    {/* Trending Content */}
-                    <View style={styles.trendingContainer}>
-                        {trendinglist.map((trending, index) => (
-                            <View key={index} style={styles.singletrendingContainer}>
-                                <Text style={styles.judultrending}>{index + 1}. {trending}</Text>
-                                <TouchableOpacity onPress={() => this.deletetrending(index)}>
-                                    <Text style={styles.deleteButton}>Hapus</Text>
-                                </TouchableOpacity>
-                            </View>
-                        ))}
-                    </View>
+            <View style={styles.container}>
+                {/* Header */}
+                <View style={styles.header}>
+                    <Text style={styles.logo}>Logo</Text>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Utama')} style={styles.navButton}>
+                        <Text style={styles.nav}>Utama</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('About')} style={styles.navButton}>
+                        <Text style={styles.nav}>About</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Trending')} style={styles.navButton}>
+                        <Text style={styles.nav}>Trending</Text>
+                    </TouchableOpacity>
                 </View>
-            </ScrollView>
+
+                {/* Trending Content */}
+                <ScrollView style={styles.trendingContainer}>
+                    {TrendingData.map((trending, index) => (
+                        <View key={index} style={styles.singletrendingContainer}>
+                            <Text style={styles.judultrending}>#{trending.trending}</Text>
+                            <View style={styles.buttonContainer}>
+                                <View style={styles.buttonSpacing}>
+                                    <Button title="Edit" onPress={() => this.klikEdit(trending.id)} />
+                                </View>
+                                <View style={styles.buttonSpacing}>
+                                    <Button title="Delete" onPress={() => this.klikDelete(trending.id)} />
+                                </View>
+                            </View>
+                        </View>
+                    ))}
+                </ScrollView>
+
+                {/* Input Form */}
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Masukkan trending"
+                        value={this.state.trending}
+                        onChangeText={(text) => this.setState({ trending: text })}
+                    />
+                    <Button title="Simpan" onPress={this.klikSimpan} />
+                </View>
+            </View>
         );
     }
-}  
+}
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
     header: {
         backgroundColor: '#e74c3c',
         paddingVertical: 20,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
-    },
-    container: {
-        flex: 1,
     },
     logo: {
         fontSize: 24,
@@ -139,6 +186,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     trendingContainer: {
+        flex: 1,
         padding: 20,
     },
     singletrendingContainer: {
@@ -156,14 +204,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         flex: 1,
     },
-    deleteButton: {
-        color: 'red',
-        marginLeft: 10,
+    buttonContainer: {
+        flexDirection: 'row',
+    },
+    buttonSpacing: {
+        marginHorizontal: 5,
     },
     inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 20,
+        margin: 20,
     },
     input: {
         flex: 1,

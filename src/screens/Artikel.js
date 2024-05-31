@@ -12,47 +12,64 @@ class Artikel extends Component {
     constructor(props){
         super(props);
         this.state = { 
-            berita: [
-                { id: 1, 
-                judul: 'Hyundai Pamerkan Seven Concept di IIMS 2024', 
-                isi: 'Otomotif',  
-                gambar: { uri: 'https://asset.kompas.com/crops/UuDggJJJROD5HPZNDQtFFCFFIiE=/0x56:1024x739/1070x713/data/photo/2024/02/24/65d961f8556c7.jpeg' }   },
-                
-                { id: 2, 
-                judul: 'STY Tuntaskan Misi, Timnas Indonesia Putus 20 Tahun Puasa Kemenangan di Hanoi', 
-                isi: 'Olahraga',  
-                gambar: { uri: 'https://asset.kompas.com/crops/ADOmpVUAose2GklDiMIY46PEjEQ=/1x0:2861x1907/740x500/data/photo/2024/03/26/6602cc4418afe.jpeg' }  },
-                
-                { id: 3, 
-                judul: 'Dinkes Bandung Ungkap Gejala DBD Dulu dan Sekarang Berbeda', 
-                isi: 'Kesehatan',  
-                gambar: { uri: 'https://asset.kompas.com/crops/IZpae7uaJjmuX_NSiggj6dFiBCg=/76x51:780x520/740x500/data/photo/2023/08/18/64df601b4cdc9.png' }  },
-                
-                { id: 4, 
-                judul: 'Denisa "Ngaku" Serahkan Uang Hasil Penipuan Tiket Coldplay ke Seseorang Berinisil D', 
-                isi: 'Trending',  
-                gambar: { uri: 'https://asset.kompas.com/crops/Nb4ih7dz3uJN2AI7PRmYUIAs8ow=/0x0:0x0/177x117/data/photo/2024/03/26/6602c9f7495af.jpg' }  },
-                
-                { id: 5, 
-                    judul: 'Hyundai Pamerkan Seven Concept di IIMS 2024', 
-                    isi: 'Otomotif',  
-                    gambar: { uri: 'https://asset.kompas.com/crops/UuDggJJJROD5HPZNDQtFFCFFIiE=/0x56:1024x739/1070x713/data/photo/2024/02/24/65d961f8556c7.jpeg' }   },
-                    
-                { id: 6, 
-                    judul: 'STY Tuntaskan Misi, Timnas Indonesia Putus 20 Tahun Puasa Kemenangan di Hanoi', 
-                    isi: 'Olahraga',  
-                    gambar: { uri: 'https://asset.kompas.com/crops/ADOmpVUAose2GklDiMIY46PEjEQ=/1x0:2861x1907/740x500/data/photo/2024/03/26/6602cc4418afe.jpeg' }  },
-            ],
-            currentCategory : 'Otomotif'
+            judul: '',
+            kategori: '',
+            deskripsi: '',
+            gambar: '',
+            listData: [],
+            currentCategory: '',
+            kategoriData: [], // State untuk menyimpan data kategori
         };
+        this.url = "http://192.168.18.158/Bezz/api.php"; // Pastikan URL ini benar
     }
+
+    componentDidMount(){
+        this.ambilListData();
+        this.ambilTabelKategori();
+    }
+
+    async ambilListData(){
+        try {
+            let response = await fetch(this.url);
+            let json = await response.json();
+            console.log('Hasil yang didapat: ' + JSON.stringify(json.data.result));
+            this.setState({ listData: json.data.result });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async ambilTabelKategori() {
+        try {
+            const response = await fetch("http://192.168.18.158/Bezz/api.php?op=tabel_kategori");
+            const json = await response.json();
+            console.log('Data Kategori yang didapat: ' + JSON.stringify(json.data.result));
+            this.setState({ kategoriData: json.data.result }); // Simpan data kategori di state
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+        }
+    }
+
     render() {
-        const { berita, currentCategory } = this.state;
-        // Cari berita dengan isi tertentu
-        const filtered = berita.filter(item => item.isi === currentCategory);
+        const { listData, currentCategory, kategoriData } = this.state;
+
+        // Membuat tautan kategori berdasarkan data kategori dari state
+        const kategoriLinks = kategoriData.map((kategori, index) => (
+            <TouchableOpacity 
+                key={index} 
+                onPress={() => this.setState({ currentCategory: kategori.kategori })}
+                style={styles.link}
+            >
+                <Text style={styles.linkkategori}>{kategori.kategori}</Text>
+            </TouchableOpacity>
+        ));
+
+        // Filter berita berdasarkan kategori saat ini
+        const filtered = currentCategory ? listData.filter(item => item.kategori === currentCategory) : listData;
+
         return (
             <View style={styles.container}>
-                {/* header */}
+                {/* Header */}
                 <View style={styles.header}>
                     <Text style={styles.logo}>Logo</Text>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('Utama')} style={styles.navButton}>
@@ -66,77 +83,44 @@ class Artikel extends Component {
                     </TouchableOpacity>
                 </View>
 
-                {/* category */}
+                {/* Category */}
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={styles.scrollView}>
-                <View style={styles.category}>
-                    <TouchableOpacity onPress={() => this.setState({ currentCategory: 'Otomotif' })} style={styles.link}>
-                        <Text style={styles.linkkategori}>Otomotif</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setState({ currentCategory: 'Olahraga' })} style={styles.link}>
-                        <Text style={styles.linkkategori}>Olahraga</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setState({ currentCategory: 'Kesehatan' })} style={styles.link}>
-                        <Text style={styles.linkkategori}>Kesehatan</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setState({ currentCategory: 'Kesehatan' })} style={styles.link}>
-                        <Text style={styles.linkkategori}>Sains</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => this.setState({ currentCategory: 'Kesehatan' })} style={styles.link}>
-                        <Text style={styles.linkkategori}>Internasional</Text>
-                    </TouchableOpacity>
-                </View>
+                    <View style={styles.category}>
+                        {kategoriLinks}
+                    </View>
                 </ScrollView>
 
-                {/* berita */}
+                {/* Berita */}
                 <ScrollView style={styles.scrollViewBerita}>
                     <View style={styles.beritaContainer}>
                         {filtered.map(item => (
-                            <TouchableOpacity key={item.id}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Berita', { item })} 
+                            key={item.id}
+                             >
                                 <View style={styles.singleBeritaContainer}>
-                                    <Image source={item.gambar} style={styles.gambarBerita} />
+                                    <Image source={{ uri: item.gambar }} style={styles.gambarBerita} />
                                     <View style={styles.beritaContent}>
                                         <Text style={styles.judulBerita}>{item.judul}</Text>
-                                        <Text>{item.isi}</Text>
+                                        <Text>{item.kategori}</Text>
                                     </View>
                                 </View>
                             </TouchableOpacity>
                         ))}
                     </View>
                 </ScrollView>
-                
             </View>
         );
     }
 }  
 
 const styles = StyleSheet.create({
-    // header
+    // Header
     header: {
         backgroundColor: '#e74c3c',
         paddingVertical: 20,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
-    },
-
-    //categori
-    scrollView: {
-        flexDirection: 'row',
-    },
-    category: {
-        backgroundColor: '#FF8C00',
-        paddingVertical: 7,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-    },
-    linkkategori: {
-        fontSize: 14,
-        marginRight: 20,
-        padding: 10,
-        color: 'white',
-        fontFamily: 'Arial',
-        fontWeight: 'bold',
     },
     logo: {
         fontSize: 24,
@@ -156,6 +140,26 @@ const styles = StyleSheet.create({
         fontFamily: 'Arial',
         fontWeight: 'bold',
     },
+
+    // Category
+    scrollView: {
+        flexDirection: 'row',
+    },
+    category: {
+        backgroundColor: '#FF8C00',
+        paddingVertical: 7,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    linkkategori: {
+        fontSize: 14,
+        marginRight: 20,
+        padding: 10,
+        color: 'white',
+        fontFamily: 'Arial',
+        fontWeight: 'bold',
+    },
     link: {
         fontSize: 14,
         color: 'white',
@@ -163,9 +167,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 
-    //berita
-    beritaContainer: {
+    // Berita
+    scrollViewBerita: {
         padding: 20,
+    },
+     //berita
+     beritaContainer: {
+        padding: 5,
     },
     singleBeritaContainer: {
         marginBottom: 20,

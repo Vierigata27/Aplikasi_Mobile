@@ -19,7 +19,7 @@ class Utama extends Component {
             listData: [],
             idEdit: null,
         };
-        this.url = "http://192.168.18.158/Bezz/api.php"; //bisa diganti sendiri sesuai api yang dibuat di htdocs
+        this.url = "http://192.168.18.158/Bezz/api.php"; // Pastikan URL ini benar
     }
     
     componentDidMount(){
@@ -27,15 +27,14 @@ class Utama extends Component {
     }
         
     async ambilListData(){
-        await fetch(this.url)
-        .then((response) => response.json())
-        .then((json) => {
+        try {
+            let response = await fetch(this.url);
+            let json = await response.json();
             console.log('Hasil yang didapat: ' + JSON.stringify(json.data.result));
             this.setState({ listData: json.data.result });
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+        } catch (error) {
+            console.error(error);
+        }
     }
        
     render(){
@@ -75,15 +74,15 @@ class Utama extends Component {
                         ))}
                     </View>
                 </ScrollView>
-                
-                
-                
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
     header: {
         backgroundColor: '#e74c3c',
         paddingVertical: 20,
