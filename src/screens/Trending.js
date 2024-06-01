@@ -80,7 +80,7 @@ class Trending extends Component {
     klikDelete(id) {
         Alert.alert(
             "Konfirmasi Hapus",
-            "Apakah Anda yakin ingin menghapus trend ini?",
+            "Apakah Anda yakin ingin menghapus tc:\Users\vieri arief m\Downloads\bezz.sqlrend ini?",
             [
                 {
                     text: "Batal",
