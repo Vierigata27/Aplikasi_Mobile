@@ -69,6 +69,7 @@ class Trending extends Component {
     }
   }
 
+
   async klikEdit(id) {
     try {
       const response = await fetch(`${this.url}?op=detail_trending&id=${id}`);
