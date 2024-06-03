@@ -8,7 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 
-class Utama extends Component {
+class Artikel extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -17,13 +17,15 @@ class Utama extends Component {
       deskripsi: '',
       gambar: '',
       listData: [],
-      idEdit: null,
+      currentCategory: '',
+      kategoriData: [], // State untuk menyimpan data kategori
     };
     this.url = 'http://192.168.18.158/Bezz/api.php'; // Pastikan URL ini benar
   }
 
   componentDidMount() {
     this.ambilListData();
+    this.ambilTabelKategori();
   }
 
   async ambilListData() {
@@ -37,21 +39,53 @@ class Utama extends Component {
     }
   }
 
+  async ambilTabelKategori() {
+    try {
+      const response = await fetch(
+        'http://192.168.56.1/Bezz/api.php?op=tabel_kategori',
+      );
+      const json = await response.json();
+      console.log(
+        'Data Kategori yang didapat: ' + JSON.stringify(json.data.result),
+      );
+      this.setState({kategoriData: json.data.result}); // Simpan data kategori di state
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  }
+
   render() {
+    const {listData, currentCategory, kategoriData} = this.state;
+
+    // Membuat tautan kategori berdasarkan data kategori dari state
+    const kategoriLinks = kategoriData.map((kategori, index) => (
+      <TouchableOpacity
+        key={index}
+        onPress={() => this.setState({currentCategory: kategori.kategori})}
+        style={styles.link}>
+        <Text style={styles.linkkategori}>{kategori.kategori}</Text>
+      </TouchableOpacity>
+    ));
+
+    // Filter berita berdasarkan kategori saat ini
+    const filtered = currentCategory
+      ? listData.filter(item => item.kategori === currentCategory)
+      : listData;
+
     return (
       <View style={styles.container}>
-        {/* header */}
+        {/* Header */}
         <View style={styles.header}>
           <Text style={styles.logo}>Logo</Text>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Utama')}
+            style={styles.navButton}>
+            <Text style={styles.nav}>Utama</Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('About')}
             style={styles.navButton}>
             <Text style={styles.nav}>About</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Artikel')}
-            style={styles.navButton}>
-            <Text style={styles.nav}>Kategori</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Trending')}
@@ -60,11 +94,18 @@ class Utama extends Component {
           </TouchableOpacity>
         </View>
 
-        {/* Isi */}
-        <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/* Category */}
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={styles.scrollView}>
+          <View style={styles.category}>{kategoriLinks}</View>
+        </ScrollView>
+
+        {/* Berita */}
+        <ScrollView style={styles.scrollViewBerita}>
           <View style={styles.beritaContainer}>
-            <Text style={styles.beritaTitle}>Berita</Text>
-            {this.state.listData.map(item => (
+            {filtered.map(item => (
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Berita', {item})}
                 key={item.id}>
@@ -82,20 +123,13 @@ class Utama extends Component {
             ))}
           </View>
         </ScrollView>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('CRUDBerita')}
-          style={styles.addButton}>
-          <Text style={styles.addText}>+</Text>
-        </TouchableOpacity>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  // Header
   header: {
     backgroundColor: '#e74c3c',
     paddingVertical: 20,
@@ -115,36 +149,46 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     backgroundColor: 'white',
   },
-  addButton: {
-    borderRadius: 50,
-    backgroundColor: '#e74c3c',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 75,
-    height: 75,
-    bottom: 25,
-    left: 270,
-    position: 'fixed',
-  },
-  addText: {
-    fontSize: 40,
-    color: 'white',
-    fontFamily: 'Arial',
-    fontWeight: 'bold',
-  },
   nav: {
     fontSize: 16,
     color: '#FB6D48',
     fontFamily: 'Arial',
     fontWeight: 'bold',
   },
-  beritaContainer: {
+
+  // Category
+  scrollView: {
+    flexDirection: 'row',
+  },
+  category: {
+    backgroundColor: '#FF8C00',
+    paddingVertical: 7,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+  },
+  linkkategori: {
+    fontSize: 14,
+    marginRight: 20,
+    padding: 10,
+    color: 'white',
+    fontFamily: 'Arial',
+    fontWeight: 'bold',
+  },
+  link: {
+    fontSize: 14,
+    color: 'white',
+    fontFamily: 'Arial',
+    fontWeight: 'bold',
+  },
+
+  // Berita
+  scrollViewBerita: {
     padding: 20,
   },
-  beritaTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
+  //berita
+  beritaContainer: {
+    padding: 5,
   },
   singleBeritaContainer: {
     marginBottom: 20,
@@ -170,4 +214,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Utama;
+export default Artikel;
