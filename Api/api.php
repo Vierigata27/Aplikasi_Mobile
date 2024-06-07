@@ -1,5 +1,10 @@
 <?php 
-error_reporting(0);
+// error_reporting(0);
+
+// $host = "localhost";
+// $user = "erpy7825_vieri";
+// $pass = "Vieri2003";
+// $db = "erpy7825_bezz";
 
 $host = "localhost";
 $user = "root";
@@ -25,6 +30,8 @@ switch($op){
     case 'detail_trending': detail_trending(); break;
     case 'update_trending': update_trending(); break;
     case 'delete_trending': delete_trending(); break;
+    case 'registrasi': registrasi(); break;
+    case 'login': login(); break;
     
 }
 
@@ -276,6 +283,91 @@ function delete_trending(){
             $hasil = "Berhasil menghapus data";
         }
         $stmt->close();
+    }
+
+    $data['data']['result'] = $hasil;
+    echo json_encode($data);
+}
+
+function registrasi() {
+    global $koneksi;
+    $nama = $_POST['nama'] ?? '';
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    $hasil = "Gagal melakukan registrasi";
+
+    if ($nama && $email && $password) {
+        // Periksa apakah email sudah terdaftar
+        $stmt = $koneksi->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->bind_result($jumlah);
+        $stmt->fetch();
+        $stmt->close();
+
+        if ($jumlah > 0) {
+            $hasil = "Email sudah terdaftar";
+        } else {
+            // Hash password sebelum disimpan
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            $stmt = $koneksi->prepare("INSERT INTO user (nama, email, password) VALUES (?, ?, ?)");
+            if ($stmt === false) {
+                $hasil = "Gagal mempersiapkan statement: " . $koneksi->error;
+            } else {
+                $stmt->bind_param("sss", $nama, $email, $hashedPassword);
+
+                if ($stmt->execute()) {
+                    $hasil = "Registrasi berhasil";
+                } else {
+                    $hasil = "Gagal mengeksekusi statement: " . $stmt->error;
+                }
+                $stmt->close();
+            }
+        }
+    } else {
+        $hasil = "Semua bidang harus diisi";
+    }
+
+    $data['data']['result'] = $hasil;
+    echo json_encode($data);
+}
+
+
+function login() {
+    global $koneksi;
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    $hasil = "Gagal melakukan login";
+
+    if ($email && $password) {
+        // Cari pengguna berdasarkan email
+        $stmt = $koneksi->prepare("SELECT id, password FROM user WHERE email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $stmt->store_result();
+
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($id, $hashedPassword);
+            $stmt->fetch();
+
+            // Verifikasi password
+            if (password_verify($password, $hashedPassword)) {
+                $hasil = "Login berhasil";
+                // Misalkan Anda ingin menyimpan ID pengguna ke dalam sesi
+                session_start();
+                $_SESSION['user_id'] = $id;
+            } else {
+                $hasil = "Password salah";
+            }
+        } else {
+            $hasil = "Email tidak terdaftar";
+        }
+        $stmt->close();
+    } else {
+        $hasil = "Email dan password harus diisi";
     }
 
     $data['data']['result'] = $hasil;

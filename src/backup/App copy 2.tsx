@@ -2,16 +2,14 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
-import Utama from './src/screens/Utama';
-import Artikel from './src/screens/Artikel';
-import About from './src/screens/About';
-import Trending from './src/screens/Trending';
-import SplashScreen from './src/screens/SplashScreen';
-import Todolist from './src/screens/Todolist';
-import Berita from './src/screens/Berita';
-import CRUDBerita from './src/screens/CRUDBerita';
-import Login from './src/screens/Login';
-import Registrasi from './src/screens/Registrasi';
+import Utama from '../screens/Utama';
+import Artikel from '../screens/Artikel';
+import About from '../screens/About';
+import Trending from '../screens/Trending';
+import SplashScreen from '../screens/SplashScreen';
+import Berita from '../screens/Berita';
+import CRUDBerita from '../screens/CRUDBerita';
+import Login from '../screens/Login';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,10 +25,7 @@ function App() {
         <Stack.Screen name="Trending" component={Trending} />
         <Stack.Screen name="Berita" component={Berita} />
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
-        <Stack.Screen name="Todolist" component={Todolist} />
         <Stack.Screen name="CRUDBerita" component={CRUDBerita} />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Registrasi" component={Registrasi} />
       </Stack.Navigator>
     </NavigationContainer>
   );
