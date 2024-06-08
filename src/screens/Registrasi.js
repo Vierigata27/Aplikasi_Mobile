@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   View,
   Text,
@@ -21,47 +21,52 @@ class Registrasi extends Component {
       email: item ? item.email : '',
       password: item ? item.password : '',
     };
-    this.url = 'http://192.168.18.158/Bezz/api.php';
+    this.url = 'http://192.168.56.1/Bezz/api.php'; // Sesuaikan dengan URL API Anda
     this.klikSimpan = this.klikSimpan.bind(this);
   }
 
   klikSimpan() {
-    const { name, email, password } = this.state;
-    
-    if (name === '' || email === '' || password === '') {
-      Alert.alert('Silakan masukkan data');
+    const {name, email, password} = this.state;
+
+    if (!name || !email || !password) {
+      Alert.alert('Silakan masukkan semua data');
       return;
     }
 
-    let urlAksi;
-    if (this.state.idEdit) {
-      urlAksi = `${this.url}?op=update&id=${this.state.idEdit}`;
-      this.setState({ idEdit: null });
-    } else {
-      urlAksi = `${this.url}?op=registrasi`;
-    }
-
-    fetch(urlAksi, {
+    fetch(`${this.url}?op=registrasi`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: `name=${name}&email=${email}&password=${password}`,
+      body:
+        'name=' +
+        this.state.name +
+        '&email=' +
+        this.state.email +
+        '&password=' +
+        this.state.password,
     })
-    .then(response => response.json())
-    .then(json => {
-      if (json.data && json.data.result === 'Registrasi berhasil') {
-        Alert.alert('Registrasi berhasil');
-        this.setState({ name: '', email: '', password: '' });
-        this.props.navigation.replace('Login');
-      } else {
-        Alert.alert('Error', json.data ? json.data.result : 'Terjadi kesalahan');
-      }
-    })
-    .catch(error => {
-      console.error('Error saving data:', error);
-      Alert.alert('Error', 'Terjadi kesalahan saat menyimpan data');
-    });
+      .then(response => response.json())
+      .then(json => {
+        console.log(json);
+        if (json.data && json.data.result === 'Registrasi berhasil') {
+          Alert.alert('Registrasi berhasil');
+          this.setState({name: '', email: '', password: ''});
+          this.props.navigation.replace('Login');
+        } else {
+          Alert.alert(
+            'Error',
+            json.data ? json.data.result : 'Terjadi kesalahan',
+          );
+        }
+      })
+      .catch(error => {
+        console.log(this.state.name);
+        console.log(this.state.email);
+        console.log(this.state.password);
+        console.error('Error saving data:', error);
+        Alert.alert('Error', 'Terjadi kesalahan saat menyimpan data');
+      });
   }
 
   render() {
@@ -81,25 +86,26 @@ class Registrasi extends Component {
             style={styles.input}
             placeholder="Masukkan nama"
             value={this.state.name}
-            onChangeText={text => this.setState({ name: text })}
+            onChangeText={text => this.setState({name: text})}
           />
 
           <TextInput
             style={styles.input}
             placeholder="Masukkan email"
             value={this.state.email}
-            onChangeText={text => this.setState({ email: text })}
+            onChangeText={text => this.setState({email: text})}
+            keyboardType="email-address"
           />
 
           <TextInput
             style={styles.input}
             placeholder="Masukkan password"
             value={this.state.password}
-            onChangeText={text => this.setState({ password: text })}
+            onChangeText={text => this.setState({password: text})}
             secureTextEntry
           />
           <View style={styles.buttonContainer}>
-            <Button title="Simpan" onPress={this.klikSimpan}  color="#373A40"/>
+            <Button title="Daftar" onPress={this.klikSimpan} color="#373A40" />
           </View>
         </View>
 

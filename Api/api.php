@@ -291,89 +291,118 @@ function delete_trending(){
 
 function registrasi() {
     global $koneksi;
-    $nama = $_POST['nama'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
+
+    // Mengambil dan membersihkan data POST
+    $nama = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    // Debugging: Cetak data POST
+    // echo "Nama: " . $nama . "<br>";
+    // echo "Email: " . $email . "<br>";
+    // echo "Password: " . $password . "<br>";
 
     $hasil = "Gagal melakukan registrasi";
+    $jumlah = NULL;
 
-    if ($nama && $email && $password) {
+    if (!empty($nama) && !empty($email) && !empty($password)) {
         // Periksa apakah email sudah terdaftar
         $stmt = $koneksi->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $stmt->bind_result($jumlah);
-        $stmt->fetch();
-        $stmt->close();
-
-        if ($jumlah > 0) {
-            $hasil = "Email sudah terdaftar";
+        if ($stmt === false) {
+            $hasil = "Gagal mempersiapkan statement: " . $koneksi->error;
         } else {
-            // Hash password sebelum disimpan
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->bind_result($jumlah);
+            $stmt->fetch();
+            $stmt->close();
 
-            $stmt = $koneksi->prepare("INSERT INTO user (nama, email, password) VALUES (?, ?, ?)");
-            if ($stmt === false) {
-                $hasil = "Gagal mempersiapkan statement: " . $koneksi->error;
+            // Periksa jika jumlah diinisialisasi
+            if (isset($jumlah) && $jumlah > 0) {
+                $hasil = "Email sudah terdaftar";
             } else {
-                $stmt->bind_param("sss", $nama, $email, $hashedPassword);
+                // Hash password sebelum disimpan
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-                if ($stmt->execute()) {
-                    $hasil = "Registrasi berhasil";
+                $stmt = $koneksi->prepare("INSERT INTO user (name, email, password) VALUES (?, ?, ?)");
+                if ($stmt === false) {
+                    $hasil = "Gagal mempersiapkan statement: " . $koneksi->error;
                 } else {
-                    $hasil = "Gagal mengeksekusi statement: " . $stmt->error;
+                    $stmt->bind_param("sss", $nama, $email, $hashedPassword);
+
+                    if ($stmt->execute()) {
+                        $hasil = "Registrasi berhasil";
+                    } else {
+                        $hasil = "Gagal mengeksekusi statement: " . $stmt->error;
+                    }
+                    $stmt->close();
                 }
-                $stmt->close();
             }
         }
     } else {
         $hasil = "Semua bidang harus diisi";
     }
 
-    $data['data']['result'] = $hasil;
+    $data = ['data' => ['result' => $hasil]];
     echo json_encode($data);
 }
+
+
+
 
 
 function login() {
     global $koneksi;
+
+    // Inisialisasi variabel
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
-
     $hasil = "Gagal melakukan login";
+    $isLogin=0;
 
-    if ($email && $password) {
-        // Cari pengguna berdasarkan email
+    $id=NULL;
+    $hashedPassword=NULL;
+
+
+    // Validasi email dan password
+    if (!empty($email) && !empty($password)) {
+        // Persiapkan statement SQL
         $stmt = $koneksi->prepare("SELECT id, password FROM user WHERE email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $stmt->store_result();
+        if ($stmt) {
+            // Bind parameter dan eksekusi statement
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->store_result();
 
-        if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id, $hashedPassword);
-            $stmt->fetch();
+            if ($stmt->num_rows > 0) {
+                // Binding hasil dari query
+                $stmt->bind_result($id, $hashedPassword);
+                $stmt->fetch();
 
-            // Verifikasi password
-            if (password_verify($password, $hashedPassword)) {
-                $hasil = "Login berhasil";
-                // Misalkan Anda ingin menyimpan ID pengguna ke dalam sesi
-                session_start();
-                $_SESSION['user_id'] = $id;
+                // Verifikasi password
+                if (password_verify($password, $hashedPassword)) {
+                    $hasil = "Login berhasil";
+                    // Memulai sesi dan menyimpan ID pengguna
+                    session_start();
+                    $_SESSION['user_id'] = $id;
+                    $isLogin=1;
+                } else {
+                    $hasil = "Password salah";
+                }
             } else {
-                $hasil = "Password salah";
+                $hasil = "Email tidak terdaftar";
             }
+            $stmt->close();
         } else {
-            $hasil = "Email tidak terdaftar";
+            $hasil = "Gagal mempersiapkan statement: " . $koneksi->error;
         }
-        $stmt->close();
     } else {
         $hasil = "Email dan password harus diisi";
     }
 
+    // Mengembalikan hasil dalam format JSON
     $data['data']['result'] = $hasil;
-    echo json_encode($data);
+    $data['status'] = $isLogin;
+
+    echo json_encode($data, JSON_PRETTY_PRINT);
 }
-
-
-
-?>

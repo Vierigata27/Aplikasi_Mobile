@@ -19,7 +19,7 @@ class Utama extends Component {
       listData: [],
       idEdit: null,
     };
-    this.url = 'http://192.168.18.158/Bezz/api.php'; // Pastikan URL ini benar
+    this.url = 'http://192.168.56.1/Bezz/api.php'; // Pastikan URL ini benar
   }
 
   componentDidMount() {

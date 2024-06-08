@@ -13,7 +13,7 @@ class Berita extends Component {
   constructor(props) {
     super(props);
 
-    this.url = 'http://192.168.18.158/Bezz/api.php';
+    this.url = 'http://192.168.56.1/Bezz/api.php';
 
     this.klikDelete = this.klikDelete.bind(this);
   }
