@@ -20,7 +20,7 @@ class Artikel extends Component {
       currentCategory: '',
       kategoriData: [], // State untuk menyimpan data kategori
     };
-    this.url = 'http://192.168.56.1/Bezz/api.php'; // Pastikan URL ini benar
+    this.url = 'http://192.168.18.158/Bezz/api.php'; // Pastikan URL ini benar
   }
 
   componentDidMount() {
@@ -42,7 +42,7 @@ class Artikel extends Component {
   async ambilTabelKategori() {
     try {
       const response = await fetch(
-        'http://192.168.56.1/Bezz/api.php?op=tabel_kategori',
+        'http://192.168.18.158/Bezz/api.php?op=tabel_kategori',
       );
       const json = await response.json();
       console.log(

@@ -40,7 +40,7 @@ class Login extends Component {
       return;
     }
 
-    fetch('http://192.168.56.1/Bezz/api.php?op=login', {
+    fetch('http://192.168.18.158/Bezz/api.php?op=login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',

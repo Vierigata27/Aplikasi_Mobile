@@ -21,7 +21,7 @@ class Registrasi extends Component {
       email: item ? item.email : '',
       password: item ? item.password : '',
     };
-    this.url = 'http://192.168.56.1/Bezz/api.php'; // Sesuaikan dengan URL API Anda
+    this.url = 'http://192.168.18.158/Bezz/api.php'; // Sesuaikan dengan URL API Anda
     this.klikSimpan = this.klikSimpan.bind(this);
   }
 

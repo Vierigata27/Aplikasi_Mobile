@@ -10,7 +10,7 @@ const DropdownComponent = ({onChange}) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          'http://192.168.56.1/Bezz/api.php?op=tabel_kategori',
+          'http://192.168.18.158/Bezz/api.php?op=tabel_kategori',
         );
         const json = await response.json();
         setKategoriData(json.data.result);
