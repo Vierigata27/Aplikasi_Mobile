@@ -1,5 +1,10 @@
 <?php 
-error_reporting(0);
+// error_reporting(0);
+
+// $host = "localhost";
+// $user = "erpy7825_vieri";
+// $pass = "Vieri2003";
+// $db = "erpy7825_bezz";
 
 $host = "localhost";
 $user = "root";
@@ -25,6 +30,8 @@ switch($op){
     case 'detail_trending': detail_trending(); break;
     case 'update_trending': update_trending(); break;
     case 'delete_trending': delete_trending(); break;
+    case 'registrasi': registrasi(); break;
+    case 'login': login(); break;
     
 }
 
@@ -282,6 +289,120 @@ function delete_trending(){
     echo json_encode($data);
 }
 
+function registrasi() {
+    global $koneksi;
+
+    // Mengambil dan membersihkan data POST
+    $nama = trim($_POST['name'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $password = trim($_POST['password'] ?? '');
+
+    // Debugging: Cetak data POST
+    // echo "Nama: " . $nama . "<br>";
+    // echo "Email: " . $email . "<br>";
+    // echo "Password: " . $password . "<br>";
+
+    $hasil = "Gagal melakukan registrasi";
+    $jumlah = NULL;
+
+    if (!empty($nama) && !empty($email) && !empty($password)) {
+        // Periksa apakah email sudah terdaftar
+        $stmt = $koneksi->prepare("SELECT COUNT(*) FROM user WHERE email = ?");
+        if ($stmt === false) {
+            $hasil = "Gagal mempersiapkan statement: " . $koneksi->error;
+        } else {
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->bind_result($jumlah);
+            $stmt->fetch();
+            $stmt->close();
+
+            // Periksa jika jumlah diinisialisasi
+            if (isset($jumlah) && $jumlah > 0) {
+                $hasil = "Email sudah terdaftar";
+            } else {
+                // Hash password sebelum disimpan
+                $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                $stmt = $koneksi->prepare("INSERT INTO user (name, email, password) VALUES (?, ?, ?)");
+                if ($stmt === false) {
+                    $hasil = "Gagal mempersiapkan statement: " . $koneksi->error;
+                } else {
+                    $stmt->bind_param("sss", $nama, $email, $hashedPassword);
+
+                    if ($stmt->execute()) {
+                        $hasil = "Registrasi berhasil";
+                    } else {
+                        $hasil = "Gagal mengeksekusi statement: " . $stmt->error;
+                    }
+                    $stmt->close();
+                }
+            }
+        }
+    } else {
+        $hasil = "Semua bidang harus diisi";
+    }
+
+    $data = ['data' => ['result' => $hasil]];
+    echo json_encode($data);
+}
 
 
-?>
+
+
+
+function login() {
+    global $koneksi;
+
+    // Inisialisasi variabel
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
+    $hasil = "Gagal melakukan login";
+    $isLogin=0;
+
+    $id=NULL;
+    $hashedPassword=NULL;
+
+
+    // Validasi email dan password
+    if (!empty($email) && !empty($password)) {
+        // Persiapkan statement SQL
+        $stmt = $koneksi->prepare("SELECT id, password FROM user WHERE email = ?");
+        if ($stmt) {
+            // Bind parameter dan eksekusi statement
+            $stmt->bind_param("s", $email);
+            $stmt->execute();
+            $stmt->store_result();
+
+            if ($stmt->num_rows > 0) {
+                // Binding hasil dari query
+                $stmt->bind_result($id, $hashedPassword);
+                $stmt->fetch();
+
+                // Verifikasi password
+                if (password_verify($password, $hashedPassword)) {
+                    $hasil = "Login berhasil";
+                    // Memulai sesi dan menyimpan ID pengguna
+                    session_start();
+                    $_SESSION['user_id'] = $id;
+                    $isLogin=1;
+                } else {
+                    $hasil = "Password salah";
+                }
+            } else {
+                $hasil = "Email tidak terdaftar";
+            }
+            $stmt->close();
+        } else {
+            $hasil = "Gagal mempersiapkan statement: " . $koneksi->error;
+        }
+    } else {
+        $hasil = "Email dan password harus diisi";
+    }
+
+    // Mengembalikan hasil dalam format JSON
+    $data['data']['result'] = $hasil;
+    $data['status'] = $isLogin;
+
+    echo json_encode($data, JSON_PRETTY_PRINT);
+}

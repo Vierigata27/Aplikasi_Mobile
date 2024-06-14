@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 31, 2024 at 11:01 AM
+-- Generation Time: Jun 15, 2024 at 01:35 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -42,7 +42,8 @@ CREATE TABLE `berita` (
 
 INSERT INTO `berita` (`id`, `judul`, `kategori_id`, `deskripsi`, `tanggal_input`, `gambar`) VALUES
 (12, 'Presiden Majelis Umum PBB: Keamanan air jaga perdamaian', 2, 'Nusa Dua, Bali (ANTARA) - Presiden Majelis Umum Perserikatan Bangsa-Bangsa (PBB) ke-78 Dennis Francis menegaskan bahwa kerja sama internasional dalam menangani masalah air dan mewujudkan keamanan air merupakan langkah menjaga perdamaian.\n\n“Investasi dalam kerja sama air secara global merupakan investasi untuk perdamaian sebagai awal untuk mewujudkan stabilitas pasokan air jangka panjang,” ucap Francis dalam Pertemuan Tingkat Tinggi World Water Forum (WWF) ke-10 di Nusa Dua, Bali, Senin.\n\nMenurut dia, saat ini manusia hidup pada masa di mana perdamaian antarnegara dapat dengan sangat mudah terganggu, termasuk dipicu oleh masalah air. Terlebih, memulihkan perdamaian memerlukan upaya yang sangat keras begitu konflik terbuka terpicu.\n\nPragmatisme itu, kata Francis, mendorong komunitas internasional untuk melakukan semua hal yang diperlukan untuk mencegah ketegangan dan konflik terbuka dipicu akibat masalah air.\n\nDia mengingatkan bahwa keamanan air sangat penting dalam pencapaian seluruh 70 Tujuan Pembangunan Berkelanjutan (SDGs), karena kelancaran pemenuhan target SDGs tergantung pada keberadaan air.\n\nOleh karena itu, kata Francis, demi menyelesaikan masalah air, komunitas internasional harus bersatu dan bertindak secara strategis, serta memperkuat inisiatif kerja sama di bidang air.\n\nDia juga optimistis WWF-10 yang baru saja dibuka dapat mendorong kerja sama internasional dalam menangani masalah air.\n\n“Saya berharap forum ini secara berarti akan memacu perkembangan kerja sama internasional serta perumusan dan penerapan aksi konkret untuk menstabilkan ketersediaan dan manajemen air jangka menengah dan panjang,” kata dia.\n\nWWF-10 yang digelar di Nusa Dua, Bali, pada 18—25 Mei, membahas konservasi air, air bersih dan sanitasi, ketahanan pangan dan energi, serta mitigasi bencana alam.\n\nSebanyak 244 sesi pembahasan terkait air dalam WWF ke-10 diharapkan dapat memberikan hasil konkret mengenai pengelolaan air secara global.', '2024-05-29 14:31:15', 'https://img.antaranews.com/cache/1200x800/2024/05/20/KTT-World-Water-Forum2a.jpg'),
-(13, 'Cerita PNS 28 Tahun Ikut Tabungan Perumahan, Pas Pensiun Cuma Dapat Rp 6,6 Juta', 1, 'Putri (bukan nama sebenarnya), seorang pensiunan guru PNS peserta program tabungan perumahan yang waktu itu namanya Bapertarum, hanya mendapat pencairan Rp 6,6 juta dari periode kepesertaannya selama 28 tahun.\n\nProgram Bapertarum-PNS dibuat pada 15 Februari 1993 berdasarkan Keputusan Presiden Nomor 14 Tahun 1993 untuk meningkatkan kesejahteraan PNS melalui beberapa skema bantuan dalam memiliki rumah yang layak.\nSetiap PNS diwajibkan untuk iuran sejumlah dana dari gajinya per bulan sesuai dengan golongan masing-masing, mulai dari Rp 3.000 untuk Golongan I, Rp 5.000 Golongan II, Rp 7.000 Golongan III, dan Rp 10.000 Golongan IV.\nWaktu itu nilai iuran yang ditampung tidak mengalami peningkatan hingga iuran Taperum-PNS dihentikan oleh Menteri Keuangan pada Agustus 2020.\nPutri bercerita sudah bekerja sebagai PNS sejak 1996 dan mulai terdaftar sebagai peserta Taperum. Dia pensiun di Januari 2024.\n\"Jumlah simpanan di Tapera saya Rp 6.677.939. Saya sudah bekerja sebagai PNS sejak 1996 dan ikut Taperum sejak saat itu,\" kata Putri kepada kumparan, Rabu (29/5).\n\nPutri mengaku hingga sekarang belum bisa mencairkan tabungannya tersebut. \"Karena harus menunggu 3 bulan dari kepesertaan nonaktif, tercatat di Tapera kepesertaan aktif saya di Mei 2024, sehingga kemungkinan bisa dicairkan di Agustus 2024,\" ujar Putri.\nSetelah dibubarkannya Bapertarum-PNS pada 2018, semua aset untuk dan atas nama Bapertarum-PNS dilikuidasi sesuai dengan amanat Undang-undang Nomor 4 Tahun 2016 Tentang Tabungan Perumahan Rakyat. Hasil likuidasi tersebut kemudian dikembalikan kepada PNS Aktif sebagai saldo awal Peserta Tapera dan PNS Pensiun atau ahli warisnya secara langsung.\nPutri menuturkan iuran yang dibayarnya ketika menjadi peserta Taperum senilai Rp 10.000 per bulan. Lalu, ketika menjadi peserta Tapera, porsi potongan iuran dari gajinya jadi lebih besar.\n\"Tidak dijelasin berapa imbal hasil pengembangannya sejak 2020 jadi Tapera. Saya juga tidak pernah pakai fasilitas Tapera,\" tutur Putri.', '2024-05-29 15:15:02', 'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1637564263/vihm2q3le4rapbizedsg.jpg');
+(13, 'Cerita PNS 28 Tahun Ikut Tabungan Perumahan, Pas Pensiun Cuma Dapat Rp 6,6 Juta', 1, 'Putri (bukan nama sebenarnya), seorang pensiunan guru PNS peserta program tabungan perumahan yang waktu itu namanya Bapertarum, hanya mendapat pencairan Rp 6,6 juta dari periode kepesertaannya selama 28 tahun.\n\nProgram Bapertarum-PNS dibuat pada 15 Februari 1993 berdasarkan Keputusan Presiden Nomor 14 Tahun 1993 untuk meningkatkan kesejahteraan PNS melalui beberapa skema bantuan dalam memiliki rumah yang layak.\nSetiap PNS diwajibkan untuk iuran sejumlah dana dari gajinya per bulan sesuai dengan golongan masing-masing, mulai dari Rp 3.000 untuk Golongan I, Rp 5.000 Golongan II, Rp 7.000 Golongan III, dan Rp 10.000 Golongan IV.\nWaktu itu nilai iuran yang ditampung tidak mengalami peningkatan hingga iuran Taperum-PNS dihentikan oleh Menteri Keuangan pada Agustus 2020.\nPutri bercerita sudah bekerja sebagai PNS sejak 1996 dan mulai terdaftar sebagai peserta Taperum. Dia pensiun di Januari 2024.\n\"Jumlah simpanan di Tapera saya Rp 6.677.939. Saya sudah bekerja sebagai PNS sejak 1996 dan ikut Taperum sejak saat itu,\" kata Putri kepada kumparan, Rabu (29/5).\n\nPutri mengaku hingga sekarang belum bisa mencairkan tabungannya tersebut. \"Karena harus menunggu 3 bulan dari kepesertaan nonaktif, tercatat di Tapera kepesertaan aktif saya di Mei 2024, sehingga kemungkinan bisa dicairkan di Agustus 2024,\" ujar Putri.\nSetelah dibubarkannya Bapertarum-PNS pada 2018, semua aset untuk dan atas nama Bapertarum-PNS dilikuidasi sesuai dengan amanat Undang-undang Nomor 4 Tahun 2016 Tentang Tabungan Perumahan Rakyat. Hasil likuidasi tersebut kemudian dikembalikan kepada PNS Aktif sebagai saldo awal Peserta Tapera dan PNS Pensiun atau ahli warisnya secara langsung.\nPutri menuturkan iuran yang dibayarnya ketika menjadi peserta Taperum senilai Rp 10.000 per bulan. Lalu, ketika menjadi peserta Tapera, porsi potongan iuran dari gajinya jadi lebih besar.\n\"Tidak dijelasin berapa imbal hasil pengembangannya sejak 2020 jadi Tapera. Saya juga tidak pernah pakai fasilitas Tapera,\" tutur Putri.', '2024-05-29 15:15:02', 'https://blue.kumparan.com/image/upload/fl_progressive,fl_lossy,c_fill,q_auto:best,w_640/v1637564263/vihm2q3le4rapbizedsg.jpg'),
+(14, 'Yamaha Resmi Luncurkan NMAX Turbo', 6, 'PT Yamaha Indonesia Motor Manufacturing (YIMM) resmi meluncurkan skutik baru NMAX generasi ketiga yang mendapat ubahan masif. Salah satu yang menarik adalah ubahan dari sektor transmisi, di mana NMAX Turbo memakai teknologi baru di kelasnya, yaitu Yamaha Electric Continuosly Variable Transmission (YECVT).Teknologi YECVT membuat fungsi roller pada CVT konvensional tidak diperlukan lagi. Karena, proses menggerakkan puli primer digantikan oleh motor penggerak sehingga proses perpindahannya bisa diatur sesuai keinginan pengendara.', '2024-06-14 12:16:54', 'https://asset.kompas.com/crops/QuOm7Lk6yu8Ztlyu7hyBc69N-ks=/0x0:6000x4000/1070x713/data/photo/2024/06/14/666bfca78a911.jpg');
 
 -- --------------------------------------------------------
 
@@ -64,7 +65,9 @@ INSERT INTO `kategori` (`id`, `kategori`) VALUES
 (2, 'Internasional'),
 (3, 'Kesehatan'),
 (4, 'Olahraga'),
-(5, 'Sains');
+(5, 'Sains'),
+(6, 'Otomotif'),
+(7, 'Makanan');
 
 -- --------------------------------------------------------
 
@@ -85,6 +88,29 @@ INSERT INTO `trending` (`id`, `trending`) VALUES
 (1, 'Internasional'),
 (2, 'indonesia'),
 (5, 'test1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `name`, `email`, `password`) VALUES
+(1, 'vieri', 'vierigata27@gmail.com', '$2y$10$3amtUC74sECqcfka8UI1XOvq2gNsTTLOvojHdcin498XM4t6YN2UW'),
+(2, 'vieri', 'vieri@gmail.com', '$2y$10$YpVZQubBbpcAbHLo2o4Uy.WPIr4/HUkqHyNQ7evYkcY9GD87hTXA6'),
+(3, 'admin', 'admin@gmail.com', '$2y$10$RPXUZ7am5me/fX6oz10L/e9qxZZT/r2GbljzwQnV8vt1n/iit9lp.'),
+(4, 'vieri', 'vieriariefm@gmail.com', '$2y$10$TdaEqzCtKLXJC6k2xHkRlOE6lmBBGvhsUYSnaehvqulk86/f1Hmhi');
 
 --
 -- Indexes for dumped tables
@@ -110,6 +136,12 @@ ALTER TABLE `trending`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -117,19 +149,25 @@ ALTER TABLE `trending`
 -- AUTO_INCREMENT for table `berita`
 --
 ALTER TABLE `berita`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `kategori`
 --
 ALTER TABLE `kategori`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `trending`
 --
 ALTER TABLE `trending`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT for table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

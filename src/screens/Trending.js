@@ -19,7 +19,7 @@ class Trending extends Component {
       trending: '',
       idEdit: null,
     };
-    this.url = 'http://192.168.56.1/Bezz/api.php';
+    this.url = 'http://192.168.18.158/Bezz/api.php';
     this.klikSimpan = this.klikSimpan.bind(this);
     this.klikEdit = this.klikEdit.bind(this);
     this.klikDelete = this.klikDelete.bind(this);
@@ -68,7 +68,6 @@ class Trending extends Component {
         });
     }
   }
-
 
   async klikEdit(id) {
     try {

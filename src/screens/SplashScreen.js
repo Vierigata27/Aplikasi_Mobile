@@ -10,7 +10,7 @@ class SplashScreen extends Component {
 
     componentDidMount() {
         setTimeout(() => {
-            this.props.navigation.dispatch(StackActions.replace('Utama'))
+            this.props.navigation.dispatch(StackActions.replace('Login'))
         }, 2000);
     }
 
@@ -19,7 +19,7 @@ class SplashScreen extends Component {
             <View style={styles.container}>
                 {/* Menampilkan gambar dan teks selamat datang */}
                 <Image
-                    source={require('../../src/images/download.png')}
+                    source={require('../../src/images/anoninews.png')}
                     style={styles.logo}
                 />
                 {/* <Text style={styles.text}>Selamat Datang</Text> */}
@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff', 
     },
     logo: {
-        width: 200, 
-        height: 200, 
+        width: 500, 
+        height: 500, 
         resizeMode: 'contain', 
         marginBottom: 20, 
     },
